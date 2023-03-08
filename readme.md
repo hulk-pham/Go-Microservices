@@ -6,3 +6,4 @@
 - GORM
 - Viper
 - Swagger
+- Upload S3

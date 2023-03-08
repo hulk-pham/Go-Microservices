@@ -19,10 +19,7 @@ type Claims struct {
 }
 
 func GenerateJWT(userClaim UserClaim) (string, error) {
-	config, err := configs.LoadAppConfig(".")
-	if err != nil {
-		panic("failed to local config")
-	}
+	config := configs.AppConfig()
 
 	expirationTime := time.Now().Add(60 * time.Minute)
 	claims := &Claims{
@@ -43,10 +40,7 @@ func GenerateJWT(userClaim UserClaim) (string, error) {
 
 func ValidateJWT(token string) (userClain UserClaim, err error) {
 	claims := &Claims{}
-	config, err := configs.LoadAppConfig(".")
-	if err != nil {
-		panic("failed to local config")
-	}
+	config := configs.AppConfig()
 
 	fmt.Print(token)
 

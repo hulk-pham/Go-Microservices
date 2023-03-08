@@ -4,6 +4,7 @@ package common
 import (
 	"fmt"
 	"math/rand"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
@@ -58,4 +59,8 @@ func NewError(key string, err error) CommonError {
 func Bind(c *gin.Context, obj interface{}) error {
 	b := binding.Default(c.Request.Method, c.ContentType())
 	return c.ShouldBindWith(obj, b)
+}
+
+func NowMinisecond() int64 {
+	return time.Now().UnixNano() / int64(time.Millisecond)
 }

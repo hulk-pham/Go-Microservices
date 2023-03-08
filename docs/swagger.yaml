@@ -51,6 +51,33 @@ definitions:
         description: Valid is true if Time is not NULL
         type: boolean
     type: object
+  hulk_go-webservice_api_user.User:
+    properties:
+      address:
+        type: string
+      avatar:
+        type: string
+      created_at:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      dob:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      hobby:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
+      phone_number:
+        type: string
+      updated_at:
+        type: string
+    type: object
   user.CreateUserRequest:
     properties:
       address:
@@ -75,31 +102,6 @@ definitions:
     - last_name
     - password
     - phone_number
-    type: object
-  user.User:
-    properties:
-      address:
-        type: string
-      created_at:
-        type: string
-      deleted_at:
-        $ref: '#/definitions/gorm.DeletedAt'
-      dob:
-        type: string
-      email:
-        type: string
-      first_name:
-        type: string
-      hobby:
-        type: string
-      id:
-        type: integer
-      last_name:
-        type: string
-      phone_number:
-        type: string
-      updated_at:
-        type: string
     type: object
 info:
   contact: {}
@@ -153,7 +155,7 @@ paths:
             - $ref: '#/definitions/common.JSONResult'
             - properties:
                 data:
-                  $ref: '#/definitions/user.User'
+                  $ref: '#/definitions/hulk_go-webservice_api_user.User'
               type: object
       summary: Sign Up
       tags:
@@ -174,9 +176,11 @@ paths:
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/user.User'
+                    $ref: '#/definitions/hulk_go-webservice_api_user.User'
                   type: array
               type: object
+      security:
+      - ApiKeyAuth: []
       summary: List User
       tags:
       - user
@@ -201,9 +205,49 @@ paths:
             - $ref: '#/definitions/common.JSONResult'
             - properties:
                 data:
-                  $ref: '#/definitions/user.User'
+                  $ref: '#/definitions/hulk_go-webservice_api_user.User'
               type: object
+      security:
+      - ApiKeyAuth: []
       summary: Create User
       tags:
       - user
+  /user/{id}/avatar-upload:
+    post:
+      consumes:
+      - application/json
+      description: create user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: file
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.JSONResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/hulk_go-webservice_api_user.User'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: User Update Avatar
+      tags:
+      - user
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

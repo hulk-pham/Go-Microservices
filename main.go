@@ -15,18 +15,21 @@ import (
 )
 
 func main() {
-	config, err := configs.LoadAppConfig(".")
-	if err != nil {
-		panic("failed to local config")
-	}
+	config := configs.AppConfig()
 
 	var db = common.Init()
 	db.AutoMigrate(&user.User{})
 
 	r := gin.Default()
+	r.MaxMultipartMemory = 8 << 20 // 8 MiB
+	r.Static("/public", "./public")
 
 	// @BasePath /api
+	// @securityDefinitions.apikey ApiKeyAuth
+	// @in header
+	// @name Authorization
 	apiGroup := r.Group("/api")
+
 	auth.Router(apiGroup)
 	user.Router(apiGroup)
 

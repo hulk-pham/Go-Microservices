@@ -9,6 +9,11 @@ import (
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		if len(c.Request.Header["Authorization"]) == 0 {
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"Message": "Require token"})
+			return
+		}
+
 		token := strings.Replace(c.Request.Header["Authorization"][0], "Bearer ", "", -1)
 
 		userClaim, err := ValidateJWT(token)

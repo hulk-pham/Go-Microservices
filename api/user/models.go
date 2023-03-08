@@ -15,4 +15,5 @@ type User struct {
 	PhoneNumber string    `json:"phone_number"`
 	Address     string    `json:"address"`
 	Dob         time.Time `json:"dob"`
+	Avatar      string    `json:"avatar"`
 }
