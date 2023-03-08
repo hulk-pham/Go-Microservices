@@ -6,4 +6,5 @@ func Router(router *gin.RouterGroup) {
 	userRouter := router.Group("/auth")
 
 	userRouter.POST("/login", LoginAction)
+	userRouter.POST("/signup", SignupAction)
 }

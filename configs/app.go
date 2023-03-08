@@ -5,6 +5,7 @@ import "github.com/spf13/viper"
 type Config struct {
 	DBSource string `mapstructure:"DB_SOURCE"`
 	AppPort  string `mapstructure:"APP_PORT"`
+	JwtKey   string `mapstructure:"JWT_KEY"`
 }
 
 func LoadAppConfig(path string) (config Config, err error) {

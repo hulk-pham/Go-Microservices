@@ -1,6 +1,7 @@
 package main
 
 import (
+	"hulk/go-webservice/api/auth"
 	"hulk/go-webservice/api/user"
 	"hulk/go-webservice/common"
 	"hulk/go-webservice/configs"
@@ -11,14 +12,7 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
-
-type Product struct {
-	gorm.Model
-	Code  string
-	Price uint
-}
 
 func main() {
 	config, err := configs.LoadAppConfig(".")
@@ -27,12 +21,13 @@ func main() {
 	}
 
 	var db = common.Init()
-	db.AutoMigrate(&Product{})
 	db.AutoMigrate(&user.User{})
 
 	r := gin.Default()
 
+	// @BasePath /api
 	apiGroup := r.Group("/api")
+	auth.Router(apiGroup)
 	user.Router(apiGroup)
 
 	docs.SwaggerInfo.BasePath = "/api"

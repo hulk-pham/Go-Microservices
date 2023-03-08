@@ -1,4 +1,48 @@
+basePath: /api
 definitions:
+  auth.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  auth.SignUpRequest:
+    properties:
+      address:
+        type: string
+      dob:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      hobby:
+        type: string
+      last_name:
+        type: string
+      password:
+        type: string
+      phone_number:
+        type: string
+    required:
+    - email
+    - first_name
+    - last_name
+    - password
+    - phone_number
+    type: object
+  common.JSONResult:
+    properties:
+      code:
+        type: integer
+      data: {}
+      message:
+        type: string
+    type: object
   gorm.DeletedAt:
     properties:
       time:
@@ -6,6 +50,31 @@ definitions:
       valid:
         description: Valid is true if Time is not NULL
         type: boolean
+    type: object
+  user.CreateUserRequest:
+    properties:
+      address:
+        type: string
+      dob:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      hobby:
+        type: string
+      last_name:
+        type: string
+      password:
+        type: string
+      phone_number:
+        type: string
+    required:
+    - email
+    - first_name
+    - last_name
+    - password
+    - phone_number
     type: object
   user.User:
     properties:
@@ -16,6 +85,8 @@ definitions:
       deleted_at:
         $ref: '#/definitions/gorm.DeletedAt'
       dob:
+        type: string
+      email:
         type: string
       first_name:
         type: string
@@ -33,6 +104,60 @@ definitions:
 info:
   contact: {}
 paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: login
+      parameters:
+      - description: body params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/auth.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.JSONResult'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: Login User
+      tags:
+      - auth
+  /auth/signup:
+    post:
+      consumes:
+      - application/json
+      description: create user
+      parameters:
+      - description: body params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/auth.SignUpRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.JSONResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/user.User'
+              type: object
+      summary: Sign Up
+      tags:
+      - auth
   /user:
     get:
       consumes:
@@ -44,10 +169,41 @@ paths:
         "200":
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/user.User'
-            type: array
+            allOf:
+            - $ref: '#/definitions/common.JSONResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/user.User'
+                  type: array
+              type: object
       summary: List User
       tags:
-      - api
+      - user
+    post:
+      consumes:
+      - application/json
+      description: create user
+      parameters:
+      - description: body params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/user.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/common.JSONResult'
+            - properties:
+                data:
+                  $ref: '#/definitions/user.User'
+              type: object
+      summary: Create User
+      tags:
+      - user
 swagger: "2.0"
