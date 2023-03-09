@@ -1,2 +1,6 @@
 # ENV
 *.env
+*.exe
+bin/
+*.out
+mongo/

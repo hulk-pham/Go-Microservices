@@ -3,7 +3,6 @@ package common
 import (
 	"bytes"
 	"fmt"
-	"hulk/go-webservice/configs"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -17,7 +16,7 @@ import (
 )
 
 func GetS3Session() *session.Session {
-	config := configs.AppConfig()
+	config := AppConfig()
 
 	s3Config := &aws.Config{
 		Region:      aws.String(config.AwsRegion),
@@ -28,7 +27,7 @@ func GetS3Session() *session.Session {
 }
 
 func UploadS3(file *multipart.FileHeader) (string, error) {
-	config := configs.AppConfig()
+	config := AppConfig()
 	fmt.Println(config)
 	upFile, err := os.Open(file.Filename)
 	fmt.Println(err)

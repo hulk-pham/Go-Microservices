@@ -1,0 +1,33 @@
+version: "3.6"
+services:
+  app:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - go_network
+  db:
+    image: mysql:8.0
+    cap_add:
+      - SYS_NICE
+    restart: always
+    environment:
+      - MYSQL_DATABASE=golang
+      - MYSQL_ROOT_PASSWORD=
+    ports:
+      - "3306:3306"
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - go_network
+networks:
+  go_network:
+    driver: bridge
+
+volumes:
+  db:
+    driver: local

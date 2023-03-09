@@ -1,8 +1,19 @@
-package configs
+package common
 
-import "github.com/spf13/viper"
+import (
+	"github.com/spf13/viper"
+
+	"path/filepath"
+	"runtime"
+)
+
+var (
+	_, b, _, _ = runtime.Caller(0)
+	basepath   = filepath.Join(filepath.Dir(b), "../")
+)
 
 type Config struct {
+	AppEnv       string `mapstructure:"APP_ENV"`
 	DBSource     string `mapstructure:"DB_SOURCE"`
 	AppPort      string `mapstructure:"APP_PORT"`
 	JwtKey       string `mapstructure:"JWT_KEY"`
@@ -14,7 +25,7 @@ type Config struct {
 
 func LoadAppConfig(path string) (config Config, err error) {
 	viper.AddConfigPath(path)
-	viper.SetConfigName("app")
+	viper.SetConfigFile(".env")
 	viper.SetConfigType("env")
 
 	viper.AutomaticEnv()
@@ -29,9 +40,9 @@ func LoadAppConfig(path string) (config Config, err error) {
 }
 
 func AppConfig() (config Config) {
-	config, err := LoadAppConfig(".")
+	config, err := LoadAppConfig(basepath)
 	if err != nil {
-		panic("failed to local config")
+		panic("failed to load app config")
 	}
 	return
 }

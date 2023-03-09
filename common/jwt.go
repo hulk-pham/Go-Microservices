@@ -2,7 +2,6 @@ package common
 
 import (
 	"fmt"
-	"hulk/go-webservice/configs"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
@@ -19,7 +18,7 @@ type Claims struct {
 }
 
 func GenerateJWT(userClaim UserClaim) (string, error) {
-	config := configs.AppConfig()
+	config := AppConfig()
 
 	expirationTime := time.Now().Add(60 * time.Minute)
 	claims := &Claims{
@@ -40,7 +39,7 @@ func GenerateJWT(userClaim UserClaim) (string, error) {
 
 func ValidateJWT(token string) (userClain UserClaim, err error) {
 	claims := &Claims{}
-	config := configs.AppConfig()
+	config := AppConfig()
 
 	fmt.Print(token)
 
