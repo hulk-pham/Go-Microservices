@@ -2,8 +2,8 @@ package main
 
 import (
 	"hulk/go-webservice/api"
-	"hulk/go-webservice/core/model"
 	"hulk/go-webservice/common"
+	"hulk/go-webservice/core/model"
 	"hulk/go-webservice/graph"
 
 	docs "hulk/go-webservice/docs"
@@ -16,7 +16,6 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 )
 
-// Defining the Graphql handler
 func graphqlHandler() gin.HandlerFunc {
 	h := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
 
@@ -39,8 +38,9 @@ func main() {
 	if config.AppEnv == "production" {
 		gin.SetMode(gin.ReleaseMode)
 	}
-	var db = common.InitDB()
-	db.AutoMigrate(&model.User{})
+	common.InitDB()
+	common.InitCacheService()
+	common.DB.AutoMigrate(&model.User{})
 
 	r := api.InitRouter()
 
@@ -48,6 +48,7 @@ func main() {
 	r.GET("/graphql-playground", playgroundHandler())
 
 	docs.SwaggerInfo.BasePath = "/api"
+	r.Use(common.CORSMiddleware())
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	r.Run(":" + config.AppPort)
 }

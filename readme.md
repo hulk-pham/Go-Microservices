@@ -8,6 +8,9 @@
 - Swagger
 - Upload S3
 - Unit test
+- GraphQL
+- Redis
+- CORS config
 
 
 ## Start

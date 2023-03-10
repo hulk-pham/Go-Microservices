@@ -1,4 +1,4 @@
-package common
+package service
 
 import (
 	"bytes"
@@ -9,6 +9,7 @@ import (
 	"path"
 	"strconv"
 
+	"hulk/go-webservice/common"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -16,7 +17,7 @@ import (
 )
 
 func GetS3Session() *session.Session {
-	config := AppConfig()
+	config := common.AppConfig()
 
 	s3Config := &aws.Config{
 		Region:      aws.String(config.AwsRegion),
@@ -27,7 +28,7 @@ func GetS3Session() *session.Session {
 }
 
 func UploadS3(file *multipart.FileHeader) (string, error) {
-	config := AppConfig()
+	config := common.AppConfig()
 	fmt.Println(config)
 	upFile, err := os.Open(file.Filename)
 	fmt.Println(err)
@@ -42,7 +43,7 @@ func UploadS3(file *multipart.FileHeader) (string, error) {
 	fileBuffer := make([]byte, fileSize)
 	upFile.Read(fileBuffer)
 
-	fileKey := strconv.Itoa(int(NowMinisecond())) + path.Ext(file.Filename)
+	fileKey := strconv.Itoa(int(common.NowMinisecond())) + path.Ext(file.Filename)
 	_, err = s3.New(s3Session).PutObject(&s3.PutObjectInput{
 		Bucket:               aws.String(config.S3BucketName),
 		Key:                  aws.String(fileKey),

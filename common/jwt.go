@@ -41,8 +41,6 @@ func ValidateJWT(token string) (userClain UserClaim, err error) {
 	claims := &Claims{}
 	config := AppConfig()
 
-	fmt.Print(token)
-
 	tkn, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
 		return []byte(config.JwtKey), nil
 	})

@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/gin-contrib/cors"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,7 +17,6 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		token := strings.Replace(c.Request.Header["Authorization"][0], "Bearer ", "", -1)
-
 		userClaim, err := ValidateJWT(token)
 
 		if err != nil {
@@ -24,7 +25,12 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		c.Set("CurrentUser", userClaim)
-
 		c.Next()
 	}
+}
+
+func CORSMiddleware() gin.HandlerFunc {
+	configCors := cors.DefaultConfig()
+	configCors.AllowOrigins = []string{"*"}
+	return cors.New(configCors)
 }

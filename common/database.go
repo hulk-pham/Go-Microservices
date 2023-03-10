@@ -3,6 +3,7 @@ package common
 import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 type Database struct {
@@ -14,7 +15,10 @@ var DB *gorm.DB
 func InitDB() *gorm.DB {
 	config := AppConfig()
 
-	db, err := gorm.Open(mysql.Open(config.DBSource), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open(config.DBSource), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Info),
+	})
+
 	if err != nil {
 		panic("failed to connect database")
 	}

@@ -1,11 +1,14 @@
 package user
 
 import (
+	"encoding/json"
 	"fmt"
 	"hulk/go-webservice/common"
-	"hulk/go-webservice/core/model"
 	"hulk/go-webservice/core/dto"
+	"hulk/go-webservice/core/model"
+	"hulk/go-webservice/core/service"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -21,9 +24,19 @@ import (
 // @Security ApiKeyAuth
 // @Router /user [get]
 func GetListUserAction(c *gin.Context) {
-	fmt.Print(c.Get("CurrentUser"))
 	var users []model.User
+	cacheValue, _ := common.CacheInstance.Get("golang:users")
+	if cacheValue != "" {
+		json.Unmarshal([]byte(cacheValue), &users)
+		c.JSON(http.StatusOK, common.JSONResult{Code: 200, Message: "Ok", Data: users})
+		return
+	}
+
 	common.DB.Find(&users)
+
+	usersStr, _ := json.Marshal(&users)
+	common.CacheInstance.Set("golang:users", string(usersStr), time.Minute*5)
+
 	c.JSON(http.StatusOK, common.JSONResult{Code: 200, Message: "Ok", Data: users})
 }
 
@@ -97,7 +110,7 @@ func UserUpdateAvatarAction(c *gin.Context) {
 	}
 
 	common.UploadLocal(c, file)
-	fileUploadedPath, err := common.UploadS3(file)
+	fileUploadedPath, err := service.UploadS3(file)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Upload file fail"})
 		return

@@ -21,6 +21,8 @@ type Config struct {
 	AwsSecret    string `mapstructure:"AWS_SECRET"`
 	AwsRegion    string `mapstructure:"AWS_REGION"`
 	S3BucketName string `mapstructure:"S3_BUCKET_NAME"`
+	RedisHost    string `mapstructure:"REDIS_HOST"`
+	RedisPort    string `mapstructure:"REDIS_PORT"`
 }
 
 func LoadAppConfig(path string) (config Config, err error) {
