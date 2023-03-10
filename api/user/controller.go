@@ -3,6 +3,8 @@ package user
 import (
 	"fmt"
 	"hulk/go-webservice/common"
+	"hulk/go-webservice/core/model"
+	"hulk/go-webservice/core/dto"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -20,35 +22,35 @@ import (
 // @Router /user [get]
 func GetListUserAction(c *gin.Context) {
 	fmt.Print(c.Get("CurrentUser"))
-	var users []User
+	var users []model.User
 	common.DB.Find(&users)
 	c.JSON(http.StatusOK, common.JSONResult{Code: 200, Message: "Ok", Data: users})
 }
 
 // PingExample godoc
 // @Summary Create User
-// @Param request body CreateUserRequest true "body params"
+// @Param request body dto.CreateUserRequest true "body params"
 // @Description create user
 // @Tags user
 // @Accept json
 // @Produce json
-// @Success 200 {object} common.JSONResult{data=User}
+// @Success 200 {object} common.JSONResult{data=model.User}
 // @Security ApiKeyAuth
 // @Router /user [post]
 func CreateUserAction(c *gin.Context) {
-	var request CreateUserRequest
+	var request dto.CreateUserRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	duplicated := User{Email: request.Email}
-	if r := common.DB.Where(&User{Email: request.Email}).First(&duplicated); r.RowsAffected > 0 {
+	duplicated := model.User{Email: request.Email}
+	if r := common.DB.Where(&model.User{Email: request.Email}).First(&duplicated); r.RowsAffected > 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Email already has been taken"})
 		return
 	}
 
-	var user User
+	var user model.User
 	user.FirstName = request.FirstName
 	user.LastName = request.LastName
 	user.Email = request.Email
@@ -77,7 +79,7 @@ func CreateUserAction(c *gin.Context) {
 // @Tags user
 // @Accept json
 // @Produce json
-// @Success 200 {object} common.JSONResult{data=User}
+// @Success 200 {object} common.JSONResult{data=model.User}
 // @Security ApiKeyAuth
 // @Router /user/{id}/avatar-upload [post]
 func UserUpdateAvatarAction(c *gin.Context) {
@@ -88,7 +90,7 @@ func UserUpdateAvatarAction(c *gin.Context) {
 	}
 
 	userID := c.Params.ByName("id")
-	var user User
+	var user model.User
 	if r := common.DB.First(&user, userID); r.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found"})
 		return

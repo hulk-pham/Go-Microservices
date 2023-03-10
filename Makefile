@@ -9,3 +9,6 @@ test:
 
 docker:
 	docker-compose up -d --build
+
+gqlgen:
+	go run github.com/99designs/gqlgen generate

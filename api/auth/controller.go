@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"hulk/go-webservice/api/user"
+	"hulk/go-webservice/core/model"
 	"hulk/go-webservice/common"
 	"net/http"
 
@@ -24,8 +24,8 @@ func LoginAction(c *gin.Context) {
 		return
 	}
 
-	var userFound user.User
-	if r := common.DB.Where(&user.User{Email: request.Email}).First(&userFound); r.RowsAffected == 0 {
+	var userFound model.User
+	if r := common.DB.Where(&model.User{Email: request.Email}).First(&userFound); r.RowsAffected == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Email not exist"})
 		return
 	}
@@ -52,7 +52,7 @@ func LoginAction(c *gin.Context) {
 // @Tags auth
 // @Accept json
 // @Produce json
-// @Success 200 {object} common.JSONResult{data=user.User}
+// @Success 200 {object} common.JSONResult{data=model.User}
 // @Router /auth/signup [post]
 func SignupAction(c *gin.Context) {
 	var request SignUpRequest
@@ -61,13 +61,13 @@ func SignupAction(c *gin.Context) {
 		return
 	}
 
-	duplicated := user.User{Email: request.Email}
-	if r := common.DB.Where(&user.User{Email: request.Email}).First(&duplicated); r.RowsAffected > 0 {
+	duplicated := model.User{Email: request.Email}
+	if r := common.DB.Where(&model.User{Email: request.Email}).First(&duplicated); r.RowsAffected > 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Email already has been taken"})
 		return
 	}
 
-	var user user.User
+	var user model.User
 	user.FirstName = request.FirstName
 	user.LastName = request.LastName
 	user.Email = request.Email

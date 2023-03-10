@@ -1,4 +1,4 @@
-package user
+package model
 
 import (
 	"hulk/go-webservice/common"
