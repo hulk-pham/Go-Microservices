@@ -1,0 +1,48 @@
+<html>
+
+<head>
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+</head>
+
+<body>
+  <h3>WebSocket Go</h3>
+  <pre id="output"></pre>
+
+  <script>
+    url = 'ws://localhost:8080/ws';
+    c = new WebSocket(url);
+
+    send = function (data) {
+      $("#output").append((new Date()) + " ==> " + data + "\n")
+      c.send(data)
+    }
+
+    c.onmessage = function (msg) {
+      console.log(msg.data);
+      $("#output").append((new Date()) + " <== " + msg.data + "\n")
+      console.log(msg)
+    }
+
+    c.onopen = function () {
+      send(JSON.stringify({
+        type: "open-room",
+        user_id: "1",
+        room_id: "1",
+        text: 'hello'
+      }))
+      setInterval(
+        function () {
+          send(JSON.stringify({
+            type: "messages",
+            user_id: "1",
+            room_id: "1",
+            text: 'hello ' + Date.now()
+          }))
+        }
+        , 1000)
+    }
+  </script>
+
+</body>
+
+</html>

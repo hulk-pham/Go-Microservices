@@ -11,6 +11,7 @@
 - GraphQL
 - Redis
 - CORS config
+- Realtime websocket
 
 
 ## Start
@@ -25,16 +26,11 @@
 ## TODO
 - learn more: https://golangbot.com/learn-golang-series/
 - advance topic: https://www.golangprograms.com/advance-programs.html
-- Unit test
-- CORS
 - Rate limit
 - Design pattern
-- Docker
 - gRPC
-- Redis cache
 - Realtime chat
 - Log/Monitor/Healthcheck
 - Add more library
-- GraphQL
 - Microservice
 - Done Go Cloud Native

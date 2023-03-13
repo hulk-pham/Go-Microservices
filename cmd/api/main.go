@@ -5,6 +5,7 @@ import (
 	"hulk/go-webservice/common"
 	"hulk/go-webservice/core/model"
 	"hulk/go-webservice/graph"
+	"hulk/go-webservice/realtime"
 
 	docs "hulk/go-webservice/docs"
 
@@ -35,20 +36,25 @@ func playgroundHandler() gin.HandlerFunc {
 
 func main() {
 	config := common.AppConfig()
+	docs.SwaggerInfo.BasePath = "/api"
+
 	if config.AppEnv == "production" {
 		gin.SetMode(gin.ReleaseMode)
 	}
+
 	common.InitDB()
 	common.InitCacheService()
+	realtime.InitRoomManager()
+
 	common.DB.AutoMigrate(&model.User{})
 
 	r := api.InitRouter()
+	r.Use(common.CORSMiddleware())
 
+	r.GET("/ws", realtime.WShandler())
 	r.POST("/query", graphqlHandler())
 	r.GET("/graphql-playground", playgroundHandler())
-
-	docs.SwaggerInfo.BasePath = "/api"
-	r.Use(common.CORSMiddleware())
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	r.Run(":" + config.AppPort)
+
 }
