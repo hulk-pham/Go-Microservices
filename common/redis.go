@@ -2,6 +2,7 @@ package common
 
 import (
 	"context"
+	"hulk/go-webservice/infrastructure/config"
 	"time"
 
 	"github.com/go-redis/redis/v8"
@@ -23,7 +24,7 @@ type CacheService struct {
 var CacheInstance CacheService
 
 func InitCacheService() {
-	config := AppConfig()
+	config := config.AppConfig()
 	CacheInstance.redisConn = redis.NewRing(&redis.RingOptions{
 		Addrs: map[string]string{
 			config.RedisHost: ":" + config.RedisPort,

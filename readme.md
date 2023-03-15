@@ -12,6 +12,7 @@
 - Redis
 - CORS config
 - Realtime websocket
+- CQRS & Clean architecture
 
 
 ## Start

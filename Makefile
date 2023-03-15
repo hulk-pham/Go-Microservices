@@ -3,6 +3,9 @@ run:
 
 dev:
 	nodemon --exec go run cmd/api/main.go --signal SIGTERM
+	
+swagdoc:
+	swag init --parseDependency --parseInternal
 
 test:
 	go test ./... | { grep -v 'no test files'; true; }

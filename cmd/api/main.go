@@ -1,13 +1,17 @@
 package main
 
 import (
-	"hulk/go-webservice/api"
 	"hulk/go-webservice/common"
-	"hulk/go-webservice/core/model"
-	"hulk/go-webservice/graph"
-	"hulk/go-webservice/realtime"
+	"hulk/go-webservice/domain/entities"
 
-	docs "hulk/go-webservice/docs"
+	"hulk/go-webservice/infrastructure/config"
+	"hulk/go-webservice/infrastructure/persist"
+
+	"hulk/go-webservice/presentation/graph"
+	"hulk/go-webservice/presentation/http"
+	"hulk/go-webservice/presentation/http/docs"
+	"hulk/go-webservice/presentation/http/middleware"
+	"hulk/go-webservice/presentation/realtime"
 
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
@@ -35,21 +39,21 @@ func playgroundHandler() gin.HandlerFunc {
 }
 
 func main() {
-	config := common.AppConfig()
+	config := config.AppConfig()
 	docs.SwaggerInfo.BasePath = "/api"
 
 	if config.AppEnv == "production" {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
-	common.InitDB()
+	persist.InitDB()
 	common.InitCacheService()
 	realtime.InitRoomManager()
 
-	common.DB.AutoMigrate(&model.User{})
+	persist.DB.AutoMigrate(&entities.User{})
 
-	r := api.InitRouter()
-	r.Use(common.CORSMiddleware())
+	r := http.InitRouter()
+	r.Use(middleware.CORSMiddleware())
 
 	r.GET("/ws", realtime.WShandler())
 	r.POST("/query", graphqlHandler())
