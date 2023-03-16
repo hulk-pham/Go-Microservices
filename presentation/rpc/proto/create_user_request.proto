@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "hulk/go-webservice/presentation/rpc/pb";
+
+message CreateUserRequest {
+  string FirstName = 1;
+  string LastName = 2;
+  string Email = 3;
+  string Password = 4;
+  string Hobby = 5;
+  string PhoneNumber = 6;
+  string Address = 7;
+  string Dob = 8;
+  string Avatar = 9;
+}
+

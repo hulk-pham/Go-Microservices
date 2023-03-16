@@ -16,6 +16,7 @@ type Config struct {
 	AppEnv       string `mapstructure:"APP_ENV"`
 	DBSource     string `mapstructure:"DB_SOURCE"`
 	AppPort      string `mapstructure:"APP_PORT"`
+	RpcPort      string `mapstructure:"RPC_PORT"`
 	JwtKey       string `mapstructure:"JWT_KEY"`
 	AwsKey       string `mapstructure:"AWS_KEY"`
 	AwsSecret    string `mapstructure:"AWS_SECRET"`

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "hulk/go-webservice/presentation/rpc/pb";
+import "user_model.proto";
+import "create_user_request.proto";
+
+service UserService {
+  rpc CreateUser(CreateUserRequest) returns (UserResponse) {}
+  rpc GetUsers(GetUsersRequest) returns (stream User) {}
+}
+
+message GetUsersRequest {
+  string params = 1;
+}
+
