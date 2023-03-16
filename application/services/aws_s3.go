@@ -31,12 +31,11 @@ func GetS3Session() *session.Session {
 
 func UploadS3(file *multipart.FileHeader) (string, error) {
 	config := config.AppConfig()
-	fmt.Println(config)
 	upFile, err := os.Open(file.Filename)
-	fmt.Println(err)
 	if err != nil {
 		return "", err
 	}
+
 	defer upFile.Close()
 
 	s3Session := GetS3Session()

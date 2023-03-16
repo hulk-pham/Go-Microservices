@@ -17,9 +17,9 @@ func UpdateUserAvatarCommand(userID string, file *multipart.FileHeader) (entitie
 		return user, errors.New("User not found")
 	}
 
-	fileUploadedPath, err := services.UploadS3(file)
+	fileUploadedPath, err := services.UploadAzBlob(file)
 	if err != nil {
-		return user, errors.New("Upload file fail")
+		return user, err
 	}
 	common.RemoveFile(file.Filename)
 	user.Avatar = fileUploadedPath
