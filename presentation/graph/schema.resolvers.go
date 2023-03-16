@@ -6,46 +6,48 @@ package graph
 
 import (
 	"context"
-	"errors"
-	"fmt"
-	"hulk/go-webservice/common"
-	"hulk/go-webservice/domain/entities"
-	"hulk/go-webservice/infrastructure/persist"
+	"hulk/go-webservice/application/modules/user/commands"
+	"hulk/go-webservice/application/modules/user/queries"
 	"hulk/go-webservice/presentation/graph/model"
-	model1 "hulk/go-webservice/presentation/graph/model"
+	"time"
 )
 
 // CreateUser is the resolver for the createUser field.
-func (r *mutationResolver) CreateUser(ctx context.Context, input model1.CreateUserRequest) (*model1.User, error) {
-	duplicated := entities.User{Email: input.Email}
-	if r := persist.DB.Where(&model.User{Email: input.Email}).First(&duplicated); r.RowsAffected > 0 {
-		return nil, errors.New("Email already has been taken")
+func (r *mutationResolver) CreateUser(ctx context.Context, input model.CreateUserRequest) (*model.User, error) {
+
+	var request commands.CreateUserDto
+
+	dob, err := time.Parse(TIME_FORMAT, input.Dob)
+
+	request = commands.CreateUserDto{
+		FirstName:   input.FirstName,
+		LastName:    input.LastName,
+		Email:       input.Email,
+		Password:    input.Password,
+		Hobby:       input.Hobby,
+		PhoneNumber: input.PhoneNumber,
+		Address:     input.Address,
+		Dob:         dob,
 	}
 
-	fmt.Print(input)
-	var user model1.User
-	user.FirstName = input.FirstName
-	user.LastName = input.LastName
-	user.Email = input.Email
-	user.Address = input.Address
-	user.Hobby = input.Hobby
-	user.PhoneNumber = input.PhoneNumber
-	user.Dob = input.Dob
-	passwordHashed, err := common.HashPassword(input.Password)
+	user, err := commands.CreateUserCommand(request)
 	if err != nil {
-		return nil, errors.New("Unable to hass password")
+		return nil, err
 	}
-	fmt.Print(passwordHashed)
-	user.Password = passwordHashed
 
-	persist.DB.Create(&user)
-	return &user, nil
+	return ParseUser(user), nil
 }
 
 // Users is the resolver for the users field.
-func (r *queryResolver) Users(ctx context.Context) ([]*model1.User, error) {
-	var users []*model1.User
-	persist.DB.Find(&users)
+func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
+	var users []*model.User
+	usersQueries := queries.GetAllUserQuery()
+
+	for i := range usersQueries {
+		user := usersQueries[i]
+		users = append(users, ParseUser(user))
+	}
+
 	return users, nil
 }
 

@@ -1,9 +1,13 @@
+.PHONY: run dev nodemonrun swagdoc test docker gqlgen rpcgen openswager
+
 run:
 	go build -o bin/main cmd/api/main.go && ./bin/main
 
-dev:
-	nodemon --exec go run cmd/api/main.go --signal SIGTERM
+dev: openswager nodemonrun 
 	
+nodemonrun:
+	nodemon --exec go run cmd/api/main.go --signal SIGTERM 
+
 swagdoc:
 	swag init --parseDependency --parseInternal
 
@@ -17,6 +21,9 @@ gqlgen:
 	go run github.com/99designs/gqlgen generate
 
 rpcgen:
-	cd rpc && protoc --proto_path=proto --go_out=pb --go_opt=paths=source_relative \
+	cd ./presentation/rpc && protoc --proto_path=proto --go_out=pb --go_opt=paths=source_relative \
 		--go-grpc_out=pb --go-grpc_opt=paths=source_relative \
 		proto/*.proto
+
+openswager:
+	open http://localhost:8080/swagger/index.html

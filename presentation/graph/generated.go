@@ -296,7 +296,7 @@ func (ec *executionContext) field_Mutation_createUser_args(ctx context.Context, 
 	var arg0 model.CreateUserRequest
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalNCreateUserRequest2hulkᚋgoᚑwebserviceᚋgraphᚋmodelᚐCreateUserRequest(ctx, tmp)
+		arg0, err = ec.unmarshalNCreateUserRequest2hulkᚋgoᚑwebserviceᚋpresentationᚋgraphᚋmodelᚐCreateUserRequest(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -386,7 +386,7 @@ func (ec *executionContext) _Mutation_createUser(ctx context.Context, field grap
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚖhulkᚋgoᚑwebserviceᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖhulkᚋgoᚑwebserviceᚋpresentationᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Mutation_createUser(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -469,7 +469,7 @@ func (ec *executionContext) _Query_users(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.([]*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚕᚖhulkᚋgoᚑwebserviceᚋgraphᚋmodelᚐUserᚄ(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚕᚖhulkᚋgoᚑwebserviceᚋpresentationᚋgraphᚋmodelᚐUserᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_users(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -3636,7 +3636,7 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) unmarshalNCreateUserRequest2hulkᚋgoᚑwebserviceᚋgraphᚋmodelᚐCreateUserRequest(ctx context.Context, v interface{}) (model.CreateUserRequest, error) {
+func (ec *executionContext) unmarshalNCreateUserRequest2hulkᚋgoᚑwebserviceᚋpresentationᚋgraphᚋmodelᚐCreateUserRequest(ctx context.Context, v interface{}) (model.CreateUserRequest, error) {
 	res, err := ec.unmarshalInputCreateUserRequest(ctx, v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
@@ -3671,11 +3671,11 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
-func (ec *executionContext) marshalNUser2hulkᚋgoᚑwebserviceᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2hulkᚋgoᚑwebserviceᚋpresentationᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v model.User) graphql.Marshaler {
 	return ec._User(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNUser2ᚕᚖhulkᚋgoᚑwebserviceᚋgraphᚋmodelᚐUserᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2ᚕᚖhulkᚋgoᚑwebserviceᚋpresentationᚋgraphᚋmodelᚐUserᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.User) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -3699,7 +3699,7 @@ func (ec *executionContext) marshalNUser2ᚕᚖhulkᚋgoᚑwebserviceᚋgraphᚋ
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNUser2ᚖhulkᚋgoᚑwebserviceᚋgraphᚋmodelᚐUser(ctx, sel, v[i])
+			ret[i] = ec.marshalNUser2ᚖhulkᚋgoᚑwebserviceᚋpresentationᚋgraphᚋmodelᚐUser(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -3719,7 +3719,7 @@ func (ec *executionContext) marshalNUser2ᚕᚖhulkᚋgoᚑwebserviceᚋgraphᚋ
 	return ret
 }
 
-func (ec *executionContext) marshalNUser2ᚖhulkᚋgoᚑwebserviceᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2ᚖhulkᚋgoᚑwebserviceᚋpresentationᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
