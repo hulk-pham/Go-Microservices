@@ -13,6 +13,7 @@
 - CORS config
 - Realtime websocket
 - CQRS & Clean architecture
+- gRPC
 
 
 ## Start
@@ -35,14 +36,11 @@ brew install protoc-gen-go-grpc
 ```
 
 
-## TODO
-- learn more: https://golangbot.com/learn-golang-series/
-- advance topic: https://www.golangprograms.com/advance-programs.html
-- Rate limit
-- Design pattern
-- gRPC
-- Realtime chat
+## More
+- Learn more: https://golangbot.com/learn-golang-series/
+- Advance topic: https://www.golangprograms.com/advance-programs.html
 - Log/Monitor/Healthcheck
-- Add more library
+- Background job
+- Multiple thread
 - Microservice
 - Done Go Cloud Native

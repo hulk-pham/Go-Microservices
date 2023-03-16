@@ -6,6 +6,7 @@ import (
 	"hulk/go-webservice/application/modules/user/queries"
 	"hulk/go-webservice/common"
 	"hulk/go-webservice/domain/entities"
+	"hulk/go-webservice/presentation/http/base"
 	"net/http"
 	"time"
 
@@ -19,7 +20,7 @@ import (
 // @Tags user
 // @Accept json
 // @Produce json
-// @Success 200 {object} common.JSONResult{data=[]entities.User}
+// @Success 200 {object} base.JSONResult{data=[]entities.User}
 // @Security ApiKeyAuth
 // @Router /user [get]
 func GetListUserAction(c *gin.Context) {
@@ -27,13 +28,13 @@ func GetListUserAction(c *gin.Context) {
 	cacheValue, _ := common.CacheInstance.Get("golang:users")
 	if cacheValue != "" {
 		json.Unmarshal([]byte(cacheValue), &users)
-		c.JSON(http.StatusOK, common.JSONResult{Code: 200, Message: "Ok", Data: users})
+		c.JSON(http.StatusOK, base.JSONResult{Code: 200, Message: "Ok", Data: users})
 		return
 	}
 	users = queries.GetAllUserQuery()
 	usersStr, _ := json.Marshal(&users)
 	common.CacheInstance.Set("golang:users", string(usersStr), time.Minute*5)
-	c.JSON(http.StatusOK, common.JSONResult{Code: 200, Message: "Ok", Data: users})
+	c.JSON(http.StatusOK, base.JSONResult{Code: 200, Message: "Ok", Data: users})
 }
 
 // PingExample godoc
@@ -43,7 +44,7 @@ func GetListUserAction(c *gin.Context) {
 // @Tags user
 // @Accept json
 // @Produce json
-// @Success 200 {object} common.JSONResult{data=entities.User}
+// @Success 200 {object} base.JSONResult{data=entities.User}
 // @Security ApiKeyAuth
 // @Router /user [post]
 func CreateUserAction(c *gin.Context) {
@@ -57,7 +58,7 @@ func CreateUserAction(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, common.JSONResult{Code: 200, Message: "Ok", Data: user})
+	c.JSON(http.StatusOK, base.JSONResult{Code: 200, Message: "Ok", Data: user})
 }
 
 // PingExample godoc
@@ -68,7 +69,7 @@ func CreateUserAction(c *gin.Context) {
 // @Tags user
 // @Accept json
 // @Produce json
-// @Success 200 {object} common.JSONResult{data=entities.User}
+// @Success 200 {object} base.JSONResult{data=entities.User}
 // @Security ApiKeyAuth
 // @Router /user/{id}/avatar-upload [post]
 func UserUpdateAvatarAction(c *gin.Context) {
@@ -84,5 +85,5 @@ func UserUpdateAvatarAction(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, common.JSONResult{Code: 200, Message: "Ok", Data: user})
+	c.JSON(http.StatusOK, base.JSONResult{Code: 200, Message: "Ok", Data: user})
 }

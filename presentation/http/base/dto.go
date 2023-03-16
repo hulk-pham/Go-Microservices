@@ -1,4 +1,4 @@
-package common
+package base
 
 type JSONResult struct {
 	Code    int         `json:"code" `

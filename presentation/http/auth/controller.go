@@ -2,7 +2,7 @@ package auth
 
 import (
 	"hulk/go-webservice/application/modules/user/commands"
-	"hulk/go-webservice/common"
+	"hulk/go-webservice/presentation/http/base"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -15,7 +15,7 @@ import (
 // @Tags auth
 // @Accept json
 // @Produce json
-// @Success 200 {object} common.JSONResult{data=string}
+// @Success 200 {object} base.JSONResult{data=string}
 // @Router /auth/login [post]
 func LoginAction(c *gin.Context) {
 	var request LoginRequest
@@ -26,7 +26,7 @@ func LoginAction(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, common.JSONResult{Code: 200, Message: "Ok", Data: token})
+	c.JSON(http.StatusOK, base.JSONResult{Code: 200, Message: "Ok", Data: token})
 }
 
 // PingExample godoc
@@ -36,7 +36,7 @@ func LoginAction(c *gin.Context) {
 // @Tags auth
 // @Accept json
 // @Produce json
-// @Success 200 {object} common.JSONResult{data=entities.User}
+// @Success 200 {object} base.JSONResult{data=entities.User}
 // @Router /auth/signup [post]
 func SignupAction(c *gin.Context) {
 	var request SignUpRequest
@@ -50,5 +50,5 @@ func SignupAction(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, common.JSONResult{Code: 200, Message: "Ok", Data: user})
+	c.JSON(http.StatusOK, base.JSONResult{Code: 200, Message: "Ok", Data: user})
 }

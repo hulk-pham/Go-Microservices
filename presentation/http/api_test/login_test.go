@@ -3,10 +3,10 @@ package api_test
 import (
 	"bytes"
 	"encoding/json"
-	"hulk/go-webservice/common"
 	"hulk/go-webservice/infrastructure/persist"
 	api "hulk/go-webservice/presentation/http"
 	"hulk/go-webservice/presentation/http/auth"
+	"hulk/go-webservice/presentation/http/base"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -28,7 +28,7 @@ func TestLoginHandler(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 
-	var result common.JSONResult
+	var result base.JSONResult
 	json.Unmarshal(w.Body.Bytes(), &result)
 
 	assert.Equal(t, http.StatusOK, w.Code)
