@@ -1,9 +1,9 @@
 package main
 
 import (
-	"hulk/go-webservice/common"
 	"hulk/go-webservice/domain/entities"
 
+	"hulk/go-webservice/infrastructure"
 	"hulk/go-webservice/infrastructure/config"
 	"hulk/go-webservice/infrastructure/persist"
 
@@ -46,10 +46,7 @@ func main() {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
-	persist.InitDB()
-	common.InitCacheService()
-	realtime.InitRoomManager()
-
+	infrastructure.RegisterAppServices()
 	persist.DB.AutoMigrate(&entities.User{})
 
 	r := http.InitRouter()

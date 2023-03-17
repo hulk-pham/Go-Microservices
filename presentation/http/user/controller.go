@@ -6,6 +6,7 @@ import (
 	"hulk/go-webservice/application/modules/user/queries"
 	"hulk/go-webservice/common"
 	"hulk/go-webservice/domain/entities"
+	"hulk/go-webservice/infrastructure/services"
 	"hulk/go-webservice/presentation/http/base"
 	"net/http"
 	"time"
@@ -25,7 +26,7 @@ import (
 // @Router /user [get]
 func GetListUserAction(c *gin.Context) {
 	var users []entities.User
-	cacheValue, _ := common.CacheInstance.Get("golang:users")
+	cacheValue, _ := services.CacheInstance.Get("golang:users")
 	if cacheValue != "" {
 		json.Unmarshal([]byte(cacheValue), &users)
 		c.JSON(http.StatusOK, base.JSONResult{Code: 200, Message: "Ok", Data: users})
@@ -33,7 +34,7 @@ func GetListUserAction(c *gin.Context) {
 	}
 	users = queries.GetAllUserQuery()
 	usersStr, _ := json.Marshal(&users)
-	common.CacheInstance.Set("golang:users", string(usersStr), time.Minute*5)
+	services.CacheInstance.Set("golang:users", string(usersStr), time.Minute*5)
 	c.JSON(http.StatusOK, base.JSONResult{Code: 200, Message: "Ok", Data: users})
 }
 

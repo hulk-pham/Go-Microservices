@@ -2,7 +2,7 @@ package commands
 
 import (
 	"errors"
-	"hulk/go-webservice/application/services"
+	"hulk/go-webservice/application/providers"
 	"hulk/go-webservice/common"
 	"hulk/go-webservice/domain/entities"
 	"hulk/go-webservice/domain/repositories"
@@ -17,7 +17,7 @@ func UpdateUserAvatarCommand(userID string, file *multipart.FileHeader) (entitie
 		return user, errors.New("User not found")
 	}
 
-	fileUploadedPath, err := services.UploadAzBlob(file)
+	fileUploadedPath, err := providers.UploadAzBlob(file)
 	if err != nil {
 		return user, err
 	}

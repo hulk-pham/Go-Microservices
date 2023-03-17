@@ -1,4 +1,4 @@
-package common
+package services
 
 import (
 	"context"
@@ -10,11 +10,6 @@ import (
 	"github.com/go-redis/cache/v8"
 )
 
-// type Object struct {
-// 	Str string
-// 	Num int
-// }
-
 type CacheService struct {
 	cache     *cache.Cache
 	context   context.Context
@@ -23,7 +18,7 @@ type CacheService struct {
 
 var CacheInstance CacheService
 
-func InitCacheService() {
+func InitRedisService() {
 	config := config.AppConfig()
 	CacheInstance.redisConn = redis.NewRing(&redis.RingOptions{
 		Addrs: map[string]string{
