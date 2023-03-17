@@ -14,7 +14,13 @@ var (
 
 type Config struct {
 	AppEnv              string `mapstructure:"APP_ENV"`
-	DBSource            string `mapstructure:"DB_SOURCE"`
+	DBAddress           string `mapstructure:"DB_ADDRESS"`
+	DBPort              string `mapstructure:"DB_PORT"`
+	DBUsername          string `mapstructure:"DB_USERNAME"`
+	DBPassword          string `mapstructure:"DB_PASSWORD"`
+	DBDatabase          string `mapstructure:"DB_DATABASE"`
+	DBCAFile            string `mapstructure:"DB_CA_FILE"`
+	DBUseSSL            string `mapstructure:"DB_USE_SSL"`
 	AppPort             string `mapstructure:"APP_PORT"`
 	RpcPort             string `mapstructure:"RPC_PORT"`
 	JwtKey              string `mapstructure:"JWT_KEY"`
