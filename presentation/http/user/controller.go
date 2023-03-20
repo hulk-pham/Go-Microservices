@@ -39,6 +39,28 @@ func GetListUserAction(c *gin.Context) {
 }
 
 // PingExample godoc
+// @Summary Search User
+// @Schemes
+// @Description search all user
+// @Tags user
+// @Accept json
+// @Produce json
+// @Success 200 {object} base.JSONResult{data=[]entities.User}
+// @Security ApiKeyAuth
+// @Router /user/search [get]
+func SearchUserAction(c *gin.Context) {
+	var users []entities.User
+
+	keyword := c.Query("keyword")
+	users, err := queries.SearchUser(keyword)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, base.JSONResult{Code: 200, Message: "Ok", Data: users})
+}
+
+// PingExample godoc
 // @Summary Create User
 // @Param request body commands.CreateUserDto true "body params"
 // @Description create user

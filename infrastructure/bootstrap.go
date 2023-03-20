@@ -11,4 +11,5 @@ func RegisterAppServices() {
 	services.InitPubSubService()
 	services.InitRedisService()
 	services.InitPubSubService()
+	services.InitFTSService()
 }

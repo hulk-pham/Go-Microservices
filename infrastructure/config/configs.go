@@ -32,6 +32,12 @@ type Config struct {
 	AzureContainerName  string `mapstructure:"AZURE_CONTAINER_NAME"`
 	RedisHost           string `mapstructure:"REDIS_HOST"`
 	RedisPort           string `mapstructure:"REDIS_PORT"`
+	KafkaHost           string `mapstructure:"KAFKA_HOST"`
+	KafkaPort           string `mapstructure:"KAFKA_PORT"`
+	KafkaConsumeGroup   string `mapstructure:"KAFKA_CONSUME_GROUP"`
+	ZincAddress         string `mapstructure:"ZINC_ADDRESS"`
+	ZincUsername        string `mapstructure:"ZINC_USERNAME"`
+	ZincPassword        string `mapstructure:"ZINC_PASSWORD"`
 }
 
 func LoadAppConfig(path string) (config Config, err error) {

@@ -14,6 +14,9 @@
 - Realtime websocket
 - CQRS & Clean architecture
 - gRPC
+- Azure Blob
+- Kafka pubsub
+- Zinc (FTS)
 
 
 ## Start
