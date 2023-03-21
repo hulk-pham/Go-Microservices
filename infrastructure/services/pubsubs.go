@@ -2,6 +2,8 @@ package services
 
 import (
 	"context"
+	"fmt"
+	"hulk/go-webservice/infrastructure/config"
 	"log"
 
 	"github.com/Shopify/sarama"
@@ -21,15 +23,16 @@ type messageHandler func(*message.Message)
 var PubSubInstance *PubSubService
 
 func InitPubSubService() {
+	config := config.AppConfig()
 	saramaSubscriberConfig := kafka.DefaultSaramaSubscriberConfig()
 	saramaSubscriberConfig.Consumer.Offsets.Initial = sarama.OffsetOldest
 
 	subscriber, err := kafka.NewSubscriber(
 		kafka.SubscriberConfig{
-			Brokers:               []string{"localhost:29092"},
+			Brokers:               []string{fmt.Sprintf("%s:%s", config.KafkaHost, config.KafkaPort)},
 			Unmarshaler:           kafka.DefaultMarshaler{},
 			OverwriteSaramaConfig: saramaSubscriberConfig,
-			ConsumerGroup:         "test_consumer_group",
+			ConsumerGroup:         config.KafkaConsumeGroup,
 		},
 		watermill.NewStdLogger(false, false),
 	)
@@ -39,13 +42,13 @@ func InitPubSubService() {
 
 	publisher, err := kafka.NewPublisher(
 		kafka.PublisherConfig{
-			Brokers:   []string{"localhost:29092"},
+			Brokers:   []string{fmt.Sprintf("%s:%s", config.KafkaHost, config.KafkaPort)},
 			Marshaler: kafka.DefaultMarshaler{},
 		},
 		watermill.NewStdLogger(false, false),
 	)
 	if err != nil {
-		panic(err)
+		log.Printf("[Pubsub] Unable init kafka connection. Err: %s", err.Error())
 	}
 
 	PubSubInstance = &PubSubService{
@@ -59,8 +62,6 @@ func (service *PubSubService) SubscribeTopic(topicName string, handler messageHa
 	if err != nil {
 		return err
 	}
-
-	log.Printf("register")
 
 	go processInternal(messages, handler)
 	return
