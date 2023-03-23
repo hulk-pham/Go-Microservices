@@ -6,7 +6,6 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
-	"net/url"
 	"strings"
 )
 
@@ -25,7 +24,7 @@ type SearchRes[T any] struct {
 // FTS = Full Text Search
 type FTSService struct {
 	httpClient         *http.Client
-	baseUrl            *url.URL
+	baseUrl            string
 	credentialUserName string
 	credentialPassword string
 }
@@ -35,23 +34,20 @@ var FTSInstance FTSService
 func InitFTSService() {
 	config := config.AppConfig()
 	FTSInstance.httpClient = &http.Client{}
-	FTSInstance.baseUrl = &url.URL{
-		Host: config.ZincAddress,
-	}
+	FTSInstance.baseUrl = config.ZincAddress
 	FTSInstance.credentialUserName = config.ZincUsername
 	FTSInstance.credentialPassword = config.ZincPassword
 }
 
 func (m *FTSService) Request(uri string, method string, data string) (string, error) {
-	rel := &url.URL{Path: uri}
-	u := m.baseUrl.ResolveReference(rel)
+	url := fmt.Sprintf("%s/%s", m.baseUrl, uri)
 	var payload io.Reader
 
 	if data != "" {
 		payload = strings.NewReader(data)
 	}
 
-	req, err := http.NewRequest(method, u.String(), payload)
+	req, err := http.NewRequest(method, url, payload)
 	if err != nil {
 		return "", err
 	}
@@ -75,7 +71,7 @@ func (m *FTSService) Request(uri string, method string, data string) (string, er
 }
 
 func (m *FTSService) Search(indexName string, query string) (string, error) {
-	dataStr, err := m.Request(fmt.Sprintf("/api/%s/_search", indexName), "POST", query)
+	dataStr, err := m.Request(fmt.Sprintf("api/%s/_search", indexName), "POST", query)
 	if err != nil {
 		return "", err
 	}
@@ -83,7 +79,7 @@ func (m *FTSService) Search(indexName string, query string) (string, error) {
 }
 
 func (m *FTSService) CreateDoc(indexName string, dataEncoded string) (string, error) {
-	dataStr, err := m.Request(fmt.Sprintf("/api/%s/_doc", indexName), "POST", dataEncoded)
+	dataStr, err := m.Request(fmt.Sprintf("api/%s/_doc", indexName), "POST", dataEncoded)
 	if err != nil {
 		return "", err
 	}
@@ -91,7 +87,7 @@ func (m *FTSService) CreateDoc(indexName string, dataEncoded string) (string, er
 }
 
 func (m *FTSService) UpdateDoc(indexName string, id string, dataEncoded string) (string, error) {
-	dataStr, err := m.Request(fmt.Sprintf("/api/%s/_update/%s", indexName, id), "POST", dataEncoded)
+	dataStr, err := m.Request(fmt.Sprintf("api/%s/_update/%s", indexName, id), "POST", dataEncoded)
 	if err != nil {
 		return "", err
 	}
@@ -99,7 +95,7 @@ func (m *FTSService) UpdateDoc(indexName string, id string, dataEncoded string) 
 }
 
 func (m *FTSService) DeleteDoc(indexName string, id string) (string, error) {
-	dataStr, err := m.Request(fmt.Sprintf("/api/%s/_update/%s", indexName, id), "DELETE", "")
+	dataStr, err := m.Request(fmt.Sprintf("api/%s/_update/%s", indexName, id), "DELETE", "")
 	if err != nil {
 		return "", err
 	}

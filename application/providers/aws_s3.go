@@ -54,8 +54,6 @@ func UploadS3(file *multipart.FileHeader) (string, error) {
 		ServerSideEncryption: aws.String("AES256"),
 	})
 
-	fmt.Println(err)
-
 	if err != nil {
 		return "", err
 	}

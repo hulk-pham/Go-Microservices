@@ -38,6 +38,10 @@ func playgroundHandler() gin.HandlerFunc {
 	}
 }
 
+// @BasePath /api
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
 	config := config.AppConfig()
 	docs.SwaggerInfo.BasePath = "/api"

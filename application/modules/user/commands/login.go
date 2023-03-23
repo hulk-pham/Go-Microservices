@@ -19,7 +19,7 @@ func LoginCommand(request LoginRequestDto) (string, error) {
 
 	user, err := userRepo.FindUserByEmail(request.Email)
 	if err != nil {
-		return "", errors.New("Email not exist")
+		return "", err
 	}
 
 	if err := common.CheckPassword(request.Password, user.Password); err != nil {

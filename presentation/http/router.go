@@ -7,11 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// @BasePath /api
-// @securityDefinitions.apikey ApiKeyAuth
-// @in header
-// @name Authorization
-
 func InitRouter() (r *gin.Engine) {
 	r = gin.Default()
 	r.MaxMultipartMemory = 8 << 20 // 8 MiB

@@ -25,7 +25,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth.LoginRequest"
+                            "$ref": "#/definitions/hulk_go-webservice_presentation_http_auth.LoginRequest"
                         }
                     }
                 ],
@@ -35,7 +35,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/common.JSONResult"
+                                    "$ref": "#/definitions/base.JSONResult"
                                 },
                                 {
                                     "type": "object",
@@ -71,7 +71,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/auth.SignUpRequest"
+                            "$ref": "#/definitions/hulk_go-webservice_presentation_http_auth.SignUpRequest"
                         }
                     }
                 ],
@@ -81,13 +81,13 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/common.JSONResult"
+                                    "$ref": "#/definitions/base.JSONResult"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/hulk_go-webservice_api_user.User"
+                                            "$ref": "#/definitions/entities.User"
                                         }
                                     }
                                 }
@@ -121,7 +121,7 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/common.JSONResult"
+                                    "$ref": "#/definitions/base.JSONResult"
                                 },
                                 {
                                     "type": "object",
@@ -129,7 +129,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/definitions/hulk_go-webservice_api_user.User"
+                                                "$ref": "#/definitions/entities.User"
                                             }
                                         }
                                     }
@@ -163,7 +163,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/user.CreateUserRequest"
+                            "$ref": "#/definitions/commands.CreateUserDto"
                         }
                     }
                 ],
@@ -173,13 +173,65 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/common.JSONResult"
+                                    "$ref": "#/definitions/base.JSONResult"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/hulk_go-webservice_api_user.User"
+                                            "$ref": "#/definitions/entities.User"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/user/search": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "search all user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Search User",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Keyword",
+                        "name": "keyword",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/base.JSONResult"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/entities.User"
+                                            }
                                         }
                                     }
                                 }
@@ -229,13 +281,13 @@
                         "schema": {
                             "allOf": [
                                 {
-                                    "$ref": "#/definitions/common.JSONResult"
+                                    "$ref": "#/definitions/base.JSONResult"
                                 },
                                 {
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/hulk_go-webservice_api_user.User"
+                                            "$ref": "#/definitions/entities.User"
                                         }
                                     }
                                 }
@@ -247,22 +299,19 @@
         }
     },
     "definitions": {
-        "auth.LoginRequest": {
+        "base.JSONResult": {
             "type": "object",
-            "required": [
-                "email",
-                "password"
-            ],
             "properties": {
-                "email": {
-                    "type": "string"
+                "code": {
+                    "type": "integer"
                 },
-                "password": {
+                "data": {},
+                "message": {
                     "type": "string"
                 }
             }
         },
-        "auth.SignUpRequest": {
+        "commands.CreateUserDto": {
             "type": "object",
             "required": [
                 "email",
@@ -298,31 +347,7 @@
                 }
             }
         },
-        "common.JSONResult": {
-            "type": "object",
-            "properties": {
-                "code": {
-                    "type": "integer"
-                },
-                "data": {},
-                "message": {
-                    "type": "string"
-                }
-            }
-        },
-        "gorm.DeletedAt": {
-            "type": "object",
-            "properties": {
-                "time": {
-                    "type": "string"
-                },
-                "valid": {
-                    "description": "Valid is true if Time is not NULL",
-                    "type": "boolean"
-                }
-            }
-        },
-        "hulk_go-webservice_api_user.User": {
+        "entities.User": {
             "type": "object",
             "properties": {
                 "address": {
@@ -363,7 +388,85 @@
                 }
             }
         },
-        "user.CreateUserRequest": {
+        "gorm.DeletedAt": {
+            "type": "object",
+            "properties": {
+                "time": {
+                    "type": "string"
+                },
+                "valid": {
+                    "description": "Valid is true if Time is not NULL",
+                    "type": "boolean"
+                }
+            }
+        },
+        "hulk_go-webservice_presentation_http_auth.LoginRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "hulk_go-webservice_presentation_http_auth.SignUpRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "first_name",
+                "last_name",
+                "password",
+                "phone_number"
+            ],
+            "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "dob": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "hobby": {
+                    "type": "string"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                }
+            }
+        },
+        "presentation_http_auth.LoginRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "presentation_http_auth.SignUpRequest": {
             "type": "object",
             "required": [
                 "email",

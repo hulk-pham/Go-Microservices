@@ -42,6 +42,7 @@ func GetListUserAction(c *gin.Context) {
 // @Summary Search User
 // @Schemes
 // @Description search all user
+// @Param keyword path string true "Keyword"
 // @Tags user
 // @Accept json
 // @Produce json
@@ -49,8 +50,6 @@ func GetListUserAction(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Router /user/search [get]
 func SearchUserAction(c *gin.Context) {
-	var users []entities.User
-
 	keyword := c.Query("keyword")
 	users, err := queries.SearchUser(keyword)
 	if err != nil {

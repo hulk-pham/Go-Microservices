@@ -8,7 +8,6 @@ import (
 func RegisterAppServices() {
 	persist.InitDB()
 	services.InitSchedulerService()
-	services.InitPubSubService()
 	services.InitRedisService()
 	services.InitPubSubService()
 	services.InitFTSService()

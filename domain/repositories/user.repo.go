@@ -25,7 +25,7 @@ func (m *UserRepository) FindUserById(userId string) (user entities.User, err er
 
 func (m *UserRepository) FindUserByEmail(email string) (user entities.User, err error) {
 	r := persist.DB.Where("email = ?", email).First(&user)
-	if r.RowsAffected > 0 {
+	if r.RowsAffected == 0 {
 		err = errors.New("Not found")
 		return
 	}

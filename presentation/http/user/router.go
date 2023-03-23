@@ -12,5 +12,6 @@ func Router(router *gin.RouterGroup) {
 
 	userRouter.GET("/", GetListUserAction)
 	userRouter.POST("/", CreateUserAction)
+	userRouter.GET("/search", SearchUserAction)
 	userRouter.POST(":id/avatar-upload", UserUpdateAvatarAction)
 }

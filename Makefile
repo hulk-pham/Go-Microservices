@@ -10,7 +10,7 @@ devrpc:
 	nodemon --exec go run cmd/grpc/server.go --signal SIGTERM
 	
 swag_doc:
-	swag init --parseDependency --parseInternal
+	swag init -g cmd/api/main.go --parseDependency --parseInternal && cp -r docs presentation/http && rm -r docs
 
 test:
 	go test ./... | { grep -v 'no test files'; true; }

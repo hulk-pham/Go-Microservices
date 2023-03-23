@@ -35,7 +35,7 @@ func CreateUserCommand(request CreateUserDto) (entities.User, error) {
 	user.Hobby = request.Hobby
 	user.PhoneNumber = request.PhoneNumber
 	user.Dob = request.Dob
-	passwordHashed, err := common.HashPassword(user.Password)
+	passwordHashed, err := common.HashPassword(request.Password)
 	if err != nil {
 		return user, err
 	}

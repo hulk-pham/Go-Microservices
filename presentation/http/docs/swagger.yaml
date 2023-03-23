@@ -1,16 +1,14 @@
 basePath: /api
 definitions:
-  auth.LoginRequest:
+  base.JSONResult:
     properties:
-      email:
+      code:
+        type: integer
+      data: {}
+      message:
         type: string
-      password:
-        type: string
-    required:
-    - email
-    - password
     type: object
-  auth.SignUpRequest:
+  commands.CreateUserDto:
     properties:
       address:
         type: string
@@ -35,23 +33,7 @@ definitions:
     - password
     - phone_number
     type: object
-  common.JSONResult:
-    properties:
-      code:
-        type: integer
-      data: {}
-      message:
-        type: string
-    type: object
-  gorm.DeletedAt:
-    properties:
-      time:
-        type: string
-      valid:
-        description: Valid is true if Time is not NULL
-        type: boolean
-    type: object
-  hulk_go-webservice_api_user.User:
+  entities.User:
     properties:
       address:
         type: string
@@ -78,7 +60,60 @@ definitions:
       updated_at:
         type: string
     type: object
-  user.CreateUserRequest:
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  hulk_go-webservice_presentation_http_auth.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  hulk_go-webservice_presentation_http_auth.SignUpRequest:
+    properties:
+      address:
+        type: string
+      dob:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      hobby:
+        type: string
+      last_name:
+        type: string
+      password:
+        type: string
+      phone_number:
+        type: string
+    required:
+    - email
+    - first_name
+    - last_name
+    - password
+    - phone_number
+    type: object
+  presentation_http_auth.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  presentation_http_auth.SignUpRequest:
     properties:
       address:
         type: string
@@ -117,7 +152,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/auth.LoginRequest'
+          $ref: '#/definitions/hulk_go-webservice_presentation_http_auth.LoginRequest'
       produces:
       - application/json
       responses:
@@ -125,7 +160,7 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/common.JSONResult'
+            - $ref: '#/definitions/base.JSONResult'
             - properties:
                 data:
                   type: string
@@ -144,7 +179,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/auth.SignUpRequest'
+          $ref: '#/definitions/hulk_go-webservice_presentation_http_auth.SignUpRequest'
       produces:
       - application/json
       responses:
@@ -152,10 +187,10 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/common.JSONResult'
+            - $ref: '#/definitions/base.JSONResult'
             - properties:
                 data:
-                  $ref: '#/definitions/hulk_go-webservice_api_user.User'
+                  $ref: '#/definitions/entities.User'
               type: object
       summary: Sign Up
       tags:
@@ -172,11 +207,11 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/common.JSONResult'
+            - $ref: '#/definitions/base.JSONResult'
             - properties:
                 data:
                   items:
-                    $ref: '#/definitions/hulk_go-webservice_api_user.User'
+                    $ref: '#/definitions/entities.User'
                   type: array
               type: object
       security:
@@ -194,7 +229,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/user.CreateUserRequest'
+          $ref: '#/definitions/commands.CreateUserDto'
       produces:
       - application/json
       responses:
@@ -202,10 +237,10 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/common.JSONResult'
+            - $ref: '#/definitions/base.JSONResult'
             - properties:
                 data:
-                  $ref: '#/definitions/hulk_go-webservice_api_user.User'
+                  $ref: '#/definitions/entities.User'
               type: object
       security:
       - ApiKeyAuth: []
@@ -235,14 +270,44 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/common.JSONResult'
+            - $ref: '#/definitions/base.JSONResult'
             - properties:
                 data:
-                  $ref: '#/definitions/hulk_go-webservice_api_user.User'
+                  $ref: '#/definitions/entities.User'
               type: object
       security:
       - ApiKeyAuth: []
       summary: User Update Avatar
+      tags:
+      - user
+  /user/search:
+    get:
+      consumes:
+      - application/json
+      description: search all user
+      parameters:
+      - description: Keyword
+        in: path
+        name: keyword
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/base.JSONResult'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/entities.User'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Search User
       tags:
       - user
 securityDefinitions:
